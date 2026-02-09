@@ -1,0 +1,9 @@
+We were given a PDF file with black "redaction" boxes hiding the text. The challenge was to read what was underneath.
+
+**The Solution:**
+1.  **Analysis:** Extracting text with `pdftotext` returned nothing. Using `pdfimages`, I extracted an image, but the text was still covered by black boxes.
+2.  **Inspecting the PDF:** I used `pdf-parser` to look at the raw PDF drawing instructions. I found commands drawing black rectangles (using `re` for rectangle and `f*` for fill) at specific coordinates.
+3.  **The Fix:** Since PDFs are text-based, I simply opened the file in a text editor and deleted the lines responsible for drawing the black rectangles.
+4.  **Result:** Opening the modified PDF rendered the page without the black boxes, revealing the hidden text clearly.
+
+**Flag:** `root{EASY_2_UNREDACT}`
