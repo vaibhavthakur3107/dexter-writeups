@@ -1,0 +1,23 @@
+This challenge was an npm CLI tool where I had to collect hidden flag fragments and forge a master key to unlock the final prize.
+
+**The Solution:**
+1.  **Collecting Fragments:**
+    -   `rootaccess scan --ultra` gave the fragment **R3v3rs3**.
+    -   `rootaccess connect --server=omega-7` gave **_3ng1n3**.
+    -   `rootaccess internal` revealed **M4st3r**.
+    -   Creating a file at `/tmp/.rootaccess_shadow` containing the SHA256 hash of `SHADOWGATE_UNLOCK_1.3.37` and running `rootaccess unlock` gave **Sh4d**.
+    -   A simulated TCP handshake (calculating a hash based on a timestamp) gave **0ws**.
+
+2.  **Forging the Master Key:**
+    The final step required a specific key format: `SHADOW_{v}_{codename}{xor}_{time}{primes}_GATE`. Based on hints in the tool:
+    -   **v**: Version 1.3.37 became `1337`.
+    -   **codename**: First 4 chars of MD5("SHADOWGATE") -> `3987`.
+    -   **xor**: XOR of "ROOT" and "FLAG" -> `1403`.
+    -   **time**: Sum of digits in the timestamp -> `1B`.
+    -   **primes**: Sum of the first 6 primes (41) -> `29`.
+
+3.  **Final Assembly:**
+    I ran the assembly command with the constructed key:
+    `rootaccess assemble --key=SHADOW_1337_39871403_1B29_GATE`
+
+**Flag:** `root{N0d3_Cl1_R3v3rs3_3ng1n33r1ng_M4st3r_0f_Sh4d0ws}`
