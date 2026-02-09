@@ -1,0 +1,17 @@
+A 64-bit ELF binary with a stack overflow vulnerability, but it had a custom "canary" protection we had to bypass. 
+
+The Solution: 
+
+    Vulnerability: The binary used gets() which allows overflowing the buffer. 
+    Bypassing the Custom Canary:
+    Instead of a standard stack canary, the program used a pointer on the heap to verify the stack integrity.
+         The Trick: The code checked if *ptr == random_value.
+         The Bypass: I overwrote the ptr to point to the BSS section (which contains zeros) and set the random_value on the stack to 0. Since 0 == 0, the check passed.
+          
+    ROP Chain: The binary had NX enabled (no shellcode), so I used ROP (Return Oriented Programming). I leaked the address of a function called administrative_shell which spawned a shell. 
+    Stack Alignment: The binary crashed because the stack wasn't 16-byte aligned when calling system(). I added a ret gadget before the shell function address to fix the alignment. 
+
+Payload Structure:
+[Buffer (64 bytes)] + [Fake Canary (0)] + [Fake Ptr (BSS)] + [Padding] + [Ret Gadget] + [administrative_shell Address] 
+
+Flag: root{i_w4n+_t0_br34k_fr33} 
