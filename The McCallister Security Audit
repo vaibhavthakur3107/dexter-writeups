@@ -1,0 +1,9 @@
+    Initial Bypass: The main website gave a 403 Forbidden error. I viewed the page source and found a comment hint: "Kevin always leaves a trail in the metadata of his photos." 
+    Finding the Password: I downloaded the image kevin_hallway.jpeg and ran exiftool on it. The metadata contained a URL parameter: page_id=0h_n0_i_f0rg0t. When I visited that URL, I found a Base64 string which decoded to the password: "Road Runner". 
+    Extracting the Data: The new page hosted two images.
+         worried_siblings.jpeg: I used steghide with the password "Road Runner" to extract hidden text files.
+         buzz_final.jpeg: I used binwalk to find a ZIP archive embedded inside the image. I unzipped it using the password "KevinMcAllister".
+          
+    Assembling the Flag: The extracted files contained fragments of the flag. A hint inside mentioned using ROT13. After applying ROT13 to the first part and combining it with the rest, I constructed the final flag. 
+
+Flag: root{K3v1n_1s_4_M4st3r_Pl4nn3r_2025} 
