@@ -1,0 +1,17 @@
+A simple cryptography challenge involving a substitution cipher. 
+
+The Solution: 
+
+    Pattern Recognition: I looked at the ciphertext: Dro pvkq sc ss3cd5_vslbkbi. 
+    Identify Cipher: The three-letter word "Dro" looked suspiciously like "The".
+         D is the 4th letter, T is the 20th.
+         The shift was -10 (or +16). This confirmed it was a Caesar Cipher (ROT10).
+          
+    Decrypt: I shifted every letter back by 10 positions.
+         Dro became The
+         pvkq became flag
+         ss3cd5_vslbkbi became ii3st5_library
+          
+    Format: The challenge used leetspeak (3 = e, 5 = s), so I formatted it as requested. 
+
+Flag: root{ii3st5_library} 
