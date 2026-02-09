@@ -1,5 +1,3 @@
-A 64-bit ELF binary with a stack overflow vulnerability, but it had a custom "canary" protection we had to bypass. 
-
 The Solution: 
 
     Vulnerability: The binary used gets() which allows overflowing the buffer. 
