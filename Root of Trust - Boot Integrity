@@ -1,0 +1,11 @@
+This challenge provided a bootable ISO that acted as a secure boot validator asking for a password.
+
+**The Solution:**
+1.  **Extracting the Binary:** I extracted the ISO and pulled out the `initramfs` file. Inside that, I found a single binary called `init`.
+2.  **Reverse Engineering:** I analyzed the binary in Ghidra. The program checked if the input was 21 characters long, applied a ROT13 transformation to it, and then XORed it against alternating keys (`0xAA` and `0x55`) to compare with a hardcoded value.
+3.  **Reversing the Logic:**
+    -   I extracted the 21-byte hardcoded value from the binary.
+    -   I XORed these bytes with the alternating keys.
+    -   I applied ROT13 to the result to reverse the transformation.
+
+**Flag:** `root{Ch41n_0f_Tru5t_Br0k3n}`
