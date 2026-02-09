@@ -1,0 +1,25 @@
+We were given a custom browser installer that spawned a helper binary (rootium_vault) to manage a "Secret Vault." We needed to find the password to unlock it. 
+
+The Solution: 
+
+    Extract the Binary: I extracted the .deb package and then unpacked the app.asar file (standard for Electron apps). Inside, I found the rootium_vault binary. 
+    Reverse Engineer: I analyzed the binary in Ghidra. It compared the input password against an encoded string stored in the .data section. 
+    Decode the Algorithm: The binary used a specific decoding loop:
+         XOR byte with 0x42
+         Rotate right by 3 bits
+         XOR with a byte from a hardcoded table
+          
+    Scripting: I wrote a Python script to reverse this logic on the extracted data blob: 
+data = # ... extracted bytes from binary ...
+table = [0xd8,0xc5,0xc5,0xde,0xde,0xc3,0xdf]
+res = bytearray()
+for i, b in enumerate(data):
+    b1 = b ^ 0x42
+    rot = ((b1 >> 3) | ((b1 << 5)&0xff)) & 0xff
+    out = rot ^ (table[i%7] ^ 0xaa)
+    res.append(out)
+print(res.decode())
+# Output: v4ult_m4st3r_p4ss_2026
+    Get Flag: I ran the binary locally, piped in the password AUTH v4ult_m4st3r_p4ss_2026, and requested the flag. 
+
+Flag: root{n0_m0r3_34sy_v4ult_3xtr4ct10n_99} 
