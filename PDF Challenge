@@ -1,0 +1,11 @@
+This challenge started with a URL. While the name suggested a PDF, the real hunt was in the source code.
+
+**The Solution:**
+1.  **Source Code:** Viewing the page source revealed a JSON comment containing a GitHub repository link.
+2.  **Git History:** The repo's README hinted to check "commit histories." I cloned the repo and looked at `git log`. One commit contained a long base64 encoded message.
+3.  **Decoding:**
+    -   Decoding the base64 string gave a weird URL: `uggcf://...`
+    -   This looked like ROT13. Rotating the characters turned it into a GitHub raw link pointing to a `font.ttf` file.
+4.  **The Flag:** I downloaded the font file and ran `strings` on it. The flag was sitting in plain text inside the font data.
+
+**Flag:** `root{easy_if_u_follow}
