@@ -1,0 +1,13 @@
+In this challenge, a "techbro" replaced password hashing with a neural network. We had the model weights and a target vector. The goal was to find a 16-character password that, when encoded, landed very close (distance < 0.00025) to the target.
+
+**The Solution:**
+1.  **Setup:** I loaded the provided PyTorch model (`encoder_weights_updated.npz`) using the `checker.py` script.
+2.  **The Approach:** Since the tolerance was extremely tight, random guessing wouldn't work. I wrote a Python script to perform a "hill climbing" attack:
+    -   Start with a random 16-character string.
+    -   Mutate one character at a time.
+    -   Keep the mutation if it got closer to the target vector.
+    -   Repeat until the distance was low enough.
+3.  **The Result:** The script converged on the password `afysghul12045260`, which resulted in a distance of ~0.00021.
+4.  **Verification:** I sent this password to the web API endpoint `/api/verify`, which returned the flag.
+
+**Flag:** `root{50_57up!d_it5_br!ll!@n7}`
