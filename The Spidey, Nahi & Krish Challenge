@@ -1,0 +1,25 @@
+This challenge provided three files: `spidey.mp4`, `nahi.jpeg`, and `Krish_ka_gana_sunega.webm`. The goal was to combine them to find the flag.
+
+**The Solution:**
+1.  **Finding the Key:** I ran `strings` on the audio file (`Krish_ka_gana_sunega.webm`) and immediately found the string `KEY=Krish42` at the very end.
+2.  **Finding the Data:** I used `binwalk` on the video file (`spidey.mp4`) and noticed extra data appended at the end. I extracted the last 38 bytes of this file.
+3.  **Finding the Mask:** The `nahi.jpeg` file acted as the XOR mask. I extracted the last 38 bytes from this image as well.
+4.  **Decryption:** The decryption required two XOR steps. First, I XORed the data from the video with the data from the image. Then, I XORed that result with the key `Krish42` (repeating the key cyclically).
+
+**Decryption Script:**
+```python
+# Load the last 38 bytes from each file
+spidey_data = open('spidey.mp4', 'rb').read()[-38:]
+nahi_data = open('nahi.jpeg', 'rb').read()[-38:]
+key = b'Krish42'
+
+# Step 1: XOR video data with image data
+step1 = bytes([spidey_data[i] ^ nahi_data[i] for i in range(38)])
+
+# Step 2: XOR result with the key
+flag = bytes([step1[i] ^ key[i % len(key)] for i in range(38)])
+
+print(flag.decode())
+```
+
+**Flag:** `root{chuttamalle_spidey_is_vibin_hard}`
