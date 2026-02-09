@@ -1,0 +1,24 @@
+A Docker image was hiding pieces of a flag in different places—metadata, layers, and the filesystem. 
+
+The Solution: 
+
+    Pull & Inspect: I pulled the image and ran docker image inspect. This JSON output contained a treasure trove:
+         Env: Contained FLAG_PART_2 (D0ck3r_)
+         Labels: Contained flag_part_3 (1m4g3s_)
+         History: One of the build layers echoed FLAG_PART_1 (root{L4y3r3d_) into a file (even though it was deleted later, the command history remained).
+          
+    Filesystem Search: I created a container from the image and exported the filesystem to a tar file.
+    bash
+     
+      
+     
+    docker export <container_id> -o fs.tar
+     
+     
+     Searching through the extracted files, I found 
+    /app/.hidden_flag_part4.txt containing N3v3r_F0rg3t}.
+         Note: There was a fake flag in /home, which I ignored.
+          
+    Assembly: I simply combined the four parts in order. 
+
+Flag: root{L4y3r3d_D0ck3r_1m4g3s_N3v3r_F0rg3t} 
