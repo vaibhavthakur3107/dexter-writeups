@@ -1,0 +1,10 @@
+This challenge provided a packet capture file (capture.pcap). The goal was to find the flag hidden within the network traffic. 
+
+The Solution: 
+
+    Analyze the Traffic: I opened the file in Wireshark and filtered for different protocols. I noticed a lot of SSH traffic, but the interesting part was an HTTP connection on port 8000. 
+    The Key: Following the HTTP stream, I saw a file download: runtime_cache.dat. When I inspected this file, I realized it contained TLS session secrets (an SSL key log). This is the "master key" that allows you to decrypt HTTPS traffic if you have the capture file. 
+    Decrypting: I configured Wireshark to use this runtime_cache.dat file as the Key Log file (under Preferences > Protocols > TLS). Instantly, the HTTPS traffic on port 8443 became readable. 
+    Finding the Flag: I followed the decrypted TCP stream for port 8443. It turned out to be a request for a "System Health Summary." Inside that log file, I found the flag hidden in plain text. 
+
+Flag: root{p4ck3t_4n4l7515_55ucc355f0l} 
